@@ -1,0 +1,10 @@
+.actived {
+  color: #fff;
+  background: #1cc4a3;
+}
+
+.links > a {
+  padding: 1rem;
+  text-decoration: none;
+  vertical-align: middle;
+};

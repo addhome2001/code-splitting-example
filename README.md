@@ -1,1 +1,1 @@
-# webpack-code-splitting-example
+# code-splitting-practice
