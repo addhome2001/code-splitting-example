@@ -66,7 +66,7 @@ module.exports = () =>
         },
       }),
       // after extract manifest.js from vendor
-      // vendor asset hash won't change if modified chunk except vendor.
+      // vendor asset hash won't change except modified vendor.
       new webpack.optimize.CommonsChunkPlugin({
         name: ['vendor', 'manifest'],
         minChunks: Infinity,
