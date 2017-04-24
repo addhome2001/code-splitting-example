@@ -1,12 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ChunkManifestPlugin = require('chunk-manifest-webpack2-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const InlineChunkManifestHtmlWebpackPlugin = require('inline-chunk-manifest-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+
+// analyzer tool
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = () =>
   ({
@@ -20,8 +22,9 @@ module.exports = () =>
       chunkFilename: '[name].[chunkhash:8].js',
     },
     plugins: [
+      // analyzer tool
+      // new BundleAnalyzerPlugin(),
       new WebpackMd5Hash(),
-      new BundleAnalyzerPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production'),
