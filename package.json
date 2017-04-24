@@ -9,7 +9,8 @@
     "clear": "rimraf dist",
     "lint": "./node_modules/.bin/eslint . --ignore-path .gitignore",
     "debug": "better-npm-run debug",
-    "build": "better-npm-run build",
+    "build": "npm run clear && webpack --env=prod --progress --profile --colors",
+    "build:prod": "better-npm-run build:prod",
     "build:demo": "better-npm-run build:demo"
   },
   "betterScripts": {
@@ -19,8 +20,8 @@
         "DEBUG": "*"
       }
     },
-    "build": {
-      "command": "npm run clear && webpack --env=prod --progress --profile --colors",
+    "build:prod": {
+      "command": "npm run build",
       "env": {
         "NODE_ENV": "production",
         "PUBLIC_PATH": "/"
@@ -29,6 +30,7 @@
     "build:demo": {
       "command": "npm run build",
       "env": {
+        "NODE_ENV": "production",
         "PUBLIC_PATH": "/code-splitting-practice"
       }
     }
