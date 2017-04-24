@@ -17,7 +17,7 @@ module.exports = () =>
     },
     output: {
       path: path.resolve(__dirname, '../dist'),
-      publicPath: '/',
+      publicPath: process.env.PUBLIC_PATH,
       filename: '[name].[chunkhash:8].js',
       chunkFilename: '[name].[chunkhash:8].js',
     },
@@ -27,7 +27,7 @@ module.exports = () =>
       new WebpackMd5Hash(),
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production'),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
