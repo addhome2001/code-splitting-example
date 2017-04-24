@@ -69,13 +69,12 @@ module.exports = () =>
         },
       }),
       // after extract manifest.js from vendor
-      // vendor asset hash won't change if modified chunk except vendor.
+      // vendor asset hash won't change except modified vendor.
       new webpack.optimize.CommonsChunkPlugin({
         name: ['vendor', 'manifest'],
         minChunks: Infinity,
       }),
-      // beacuase react-avatar is not used as the initial time
-      // async load as need it.
+      // load react-avatar whenever required.
       new webpack.optimize.CommonsChunkPlugin({
         async: 'react-avatar',
         minChunks(module) {
