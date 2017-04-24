@@ -2,7 +2,7 @@
 
 set -e
 
-npm run build
+npm run build:demo
 
 echo "Build successful"
 
