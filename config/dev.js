@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
 module.exports = () =>
   ({
@@ -32,6 +33,9 @@ module.exports = () =>
         title: 'Example',
         filename: 'index.html',
         template: path.resolve(__dirname, '../templates', 'index.ejs'),
+      }),
+      new PreloadWebpackPlugin({
+        rel: 'prefetch',
       }),
     ],
     resolve: {

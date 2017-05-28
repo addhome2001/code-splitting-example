@@ -6,6 +6,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const InlineChunkManifestHtmlWebpackPlugin = require('inline-chunk-manifest-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
 // analyzer tool
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -53,6 +54,9 @@ module.exports = () =>
           removeComments: true,
           collapseWhitespace: true,
         },
+      }),
+      new PreloadWebpackPlugin({
+        rel: 'prefetch',
       }),
       // Code splitting begin
       // inline your manifest.js with a script tag to save http request.
