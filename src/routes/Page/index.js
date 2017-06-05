@@ -1,18 +1,16 @@
 export default {
   path: 'page',
   getComponent(nextState, cb) {
-    require.ensure([], require =>
-      cb(null, require('./components/Page').default),
-      'page',
+    import(/* webpackChunkName: 'page' */'./components/Page').then(page =>
+      cb(null, page.default),
     );
   },
   getChildRoutes(partialNextState, cb) {
-    require.ensure([], require =>
-      cb(null, [
-        require('./routes/Profile').default,
-        require('./routes/About').default,
-      ]),
-      'routes',
+    Promise.all([
+      import(/* webpackChunkName: 'route-profile' */'./routes/Profile'),
+      import(/* webpackChunkName: 'route-about' */'./routes/About'),
+    ]).then(([Profile, About]) =>
+      cb(null, [Profile.default, About.default]),
     );
   },
 };

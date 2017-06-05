@@ -1,9 +1,8 @@
 export default {
   path: 'about',
   getComponent(nextState, cb) {
-    require.ensure([], require =>
-      cb(null, require('./components/About').default),
-      'about',
+    import(/* webpackChunkName: 'about' */'./components/About').then(about =>
+      cb(null, about.default),
     );
   },
 };

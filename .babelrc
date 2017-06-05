@@ -1,8 +1,11 @@
 {
   "presets": [
     ["es2015", {
-      "modules": false,
+      "modules": false
     }
   ], "stage-0", "react"],
-  "plugins": ["transform-runtime"]
+  "plugins": [
+    "transform-runtime",
+    "syntax-dynamic-import"
+  ]
 }
