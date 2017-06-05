@@ -7,6 +7,7 @@ const InlineChunkManifestHtmlWebpackPlugin = require('inline-chunk-manifest-html
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const OfflinePlugin = require('offline-plugin');
 
 // analyzer tool
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -90,6 +91,12 @@ module.exports = () =>
       // extract css file
       new ExtractTextPlugin({
         filename: '[name].[contenthash:8].css',
+      }),
+      // appCache 將被棄用
+      new OfflinePlugin({
+        ServiceWorker: {
+          events: true,
+        },
       }),
     ],
     resolve: {

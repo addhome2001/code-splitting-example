@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const OfflinePlugin = require('offline-plugin');
 
 module.exports = () =>
   ({
@@ -22,6 +23,7 @@ module.exports = () =>
       path: path.join(__dirname, '../dist'),
       publicPath: '/',
       filename: '[name].js',
+      chunkFilename: '[name].[chunkhash:8].js',
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
@@ -36,6 +38,14 @@ module.exports = () =>
       }),
       new PreloadWebpackPlugin({
         rel: 'prefetch',
+      }),
+      new OfflinePlugin({
+        ServiceWorker: {
+          events: true,
+        },
+        caches: {
+          main: ['index.html'],
+        },
       }),
     ],
     resolve: {
