@@ -23,6 +23,7 @@ module.exports = () =>
       filename: '[name].[chunkhash:8].js',
       chunkFilename: '[name].[chunkhash:8].chunk.js',
     },
+    devtool: 'cheap-source-map',
     plugins: [
       // analyzer tool
       // new BundleAnalyzerPlugin(),
@@ -36,6 +37,7 @@ module.exports = () =>
         debug: false,
       }),
       new webpack.optimize.UglifyJsPlugin({
+        sourceMap: true,
         compress: {
           warnings: false,
           unused: true,
@@ -95,16 +97,32 @@ module.exports = () =>
       new ExtractTextPlugin({
         filename: '[name].[contenthash:8].css',
       }),
-      // appCache 將被棄用，但safari不支持service worker
       new OfflinePlugin({
+        safeToUseOptionalCaches: true,
+
+        // 預設appCache只有快取cache且沒有延遲請求的
+        // 所以需手動添加additional和optional
+        // appCache將被棄用
+        // 但safari不支持service worker
+        AppCache: {
+          caches: ['main', 'optional'],
+        },
         ServiceWorker: {
           events: true,
         },
         caches: {
-          main: ['all', ':rest:'],
-          additional: [':externals:'],
+          main: [':rest:'],
+          // additional: [':externals:'],
+
+          // 因為chunk並不需要立即使用
+          // 所以會在下載後才進入cache
+          // SW並不會一開始下載
           optional: ['*.chunk.js'],
         },
+        // 對應:externals:特殊字
+        // 可添加沒有被webpack打包的靜態資源
+        // 例如：字體
+        // externals: [],
       }),
     ],
     resolve: {
