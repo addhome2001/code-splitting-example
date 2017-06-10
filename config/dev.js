@@ -2,28 +2,31 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const OfflinePlugin = require('offline-plugin');
+
+const entryPath = path.resolve(__dirname, '../src');
+const distPath = path.resolve(__dirname, '../dist');
+const template = path.resolve(__dirname, '../templates', 'index.ejs');
 
 module.exports = () =>
   ({
     entry: {
       bundle: [
         'webpack/hot/dev-server',
-        path.resolve(__dirname, '../src'),
+        entryPath,
       ],
     },
     devServer: {
       host: '0.0.0.0',
       port: 8000,
-      contentBase: path.resolve(__dirname, '../dist'),
+      contentBase: distPath,
       historyApiFallback: true,
     },
-    devtool: 'eval',
+    devtool: 'eval-source-map',
     output: {
-      path: path.join(__dirname, '../dist'),
+      path: distPath,
       publicPath: '/',
       filename: '[name].js',
-      chunkFilename: '[name].[chunkhash:8].js',
+      chunkFilename: '[name].js',
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
@@ -34,19 +37,17 @@ module.exports = () =>
       new HtmlWebpackPlugin({
         title: 'Example',
         filename: 'index.html',
-        template: path.resolve(__dirname, '../templates', 'index.ejs'),
+        template,
       }),
       new PreloadWebpackPlugin({
         rel: 'prefetch',
       }),
-      new OfflinePlugin({
-        ServiceWorker: {
-          events: true,
-        },
-        caches: {
-          main: ['index.html'],
-        },
-      }),
+      /**
+       * 預設webpack的模塊id是數字
+       * NamedModulesPlugin將數字替換成模塊路徑
+       * 以方便除錯
+       */
+      new webpack.NamedModulesPlugin(),
     ],
     resolve: {
       extensions: ['.js', '.jsx'],
