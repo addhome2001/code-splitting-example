@@ -21,7 +21,7 @@ module.exports = () =>
       path: path.resolve(__dirname, '../dist'),
       publicPath: '/',
       filename: '[name].[chunkhash:8].js',
-      chunkFilename: '[name].[chunkhash:8].js',
+      chunkFilename: '[name].[chunkhash:8].chunk.js',
     },
     plugins: [
       // analyzer tool
@@ -100,7 +100,11 @@ module.exports = () =>
         ServiceWorker: {
           events: true,
         },
-        caches: 'all',
+        caches: {
+          main: ['all', ':rest:'],
+          additional: [':externals:'],
+          optional: ['*.chunk.js'],
+        },
       }),
     ],
     resolve: {
