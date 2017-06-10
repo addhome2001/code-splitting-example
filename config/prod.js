@@ -89,14 +89,18 @@ module.exports = () =>
         },
       }),
       // extract css file
+      // 由於css是由進入點js引入的，所以chunkhash會相同
+      // 這導致只要進入點js修改後，也會改變css的chunkhash
+      // 而contenthash則是以內容產生hash
       new ExtractTextPlugin({
         filename: '[name].[contenthash:8].css',
       }),
-      // appCache 將被棄用
+      // appCache 將被棄用，但safari不支持service worker
       new OfflinePlugin({
         ServiceWorker: {
           events: true,
         },
+        caches: 'all',
       }),
     ],
     resolve: {
