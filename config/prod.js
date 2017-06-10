@@ -11,6 +11,8 @@ const OfflinePlugin = require('offline-plugin');
 // analyzer tool
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const NODE_ENV = process.env.NODE_ENV || 'production';
+
 const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
@@ -51,7 +53,7 @@ module.exports = () =>
 
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
@@ -76,9 +78,6 @@ module.exports = () =>
        */
       new webpack.optimize.AggressiveMergingPlugin(),
 
-      /**
-       * PROD_MODE讓模板識別開發環境
-       */
       new HtmlWebpackPlugin({
         title: 'Example',
         filename: 'index.html',
@@ -87,7 +86,6 @@ module.exports = () =>
           removeComments: true,
           collapseWhitespace: true,
         },
-        PROD_MODE: true,
       }),
 
       /**
@@ -182,6 +180,7 @@ module.exports = () =>
          * appCache將被棄用
          * 但safari不支持service worker
          * FALLBACK會在斷線時去讀取已經獲取的manifest
+         * 只有在開發環境才會請求/appcache/manifest.html
          */
         AppCache: {
           caches: ['main', 'optional'],

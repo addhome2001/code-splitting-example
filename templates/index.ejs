@@ -8,7 +8,7 @@
 </head>
 <body>
   <div id="container"></div>
-  <% if (htmlWebpackPlugin.options.PROD_MODE) { %>
+  <% if (!htmlWebpackPlugin.options.__DEV__) { %>
       <iframe src="/appcache/manifest.html" style="display: none"></iframe>
   <% } %>
   <%= htmlWebpackPlugin.files.webpackManifest %>

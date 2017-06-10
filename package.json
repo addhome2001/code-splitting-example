@@ -5,13 +5,21 @@
   "main": "src/index.js",
   "author": "addhome2001",
   "scripts": {
-    "start": "webpack-dev-server --env=dev --profile --colors --progress",
+    "start": "better-npm-run start",
     "clear": "rimraf dist",
     "lint": "./node_modules/.bin/eslint . --ignore-path .gitignore",
     "debug": "better-npm-run debug",
     "build": "better-npm-run build"
   },
   "betterScripts": {
+    "start": {
+      "command": "webpack-dev-server --env=dev --profile --colors --progress",
+      "env": {
+        "NODE_ENV": "development",
+        "HOST": "0.0.0.0",
+        "PORT": 8000
+      }
+    },
     "debug": {
       "command": "npm start",
       "env": {

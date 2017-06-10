@@ -3,6 +3,10 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
+const HOST = process.env.HOST || 'localhost';
+const PORT = +process.env.PORT || 8000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
 const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
@@ -16,8 +20,8 @@ module.exports = () =>
       ],
     },
     devServer: {
-      host: '0.0.0.0',
-      port: 8000,
+      host: HOST,
+      port: PORT,
       contentBase: distPath,
       historyApiFallback: true,
     },
@@ -38,6 +42,7 @@ module.exports = () =>
         title: 'Example',
         filename: 'index.html',
         template,
+        __DEV__: true,
       }),
       new PreloadWebpackPlugin({
         rel: 'prefetch',
@@ -48,6 +53,9 @@ module.exports = () =>
        * 以方便除錯
        */
       new webpack.NamedModulesPlugin(),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+      }),
     ],
     resolve: {
       extensions: ['.js', '.jsx'],
