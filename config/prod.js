@@ -212,6 +212,10 @@ module.exports = () =>
         },
         // externals: [],
       }),
+      /**
+       * 啟動webpack預設模塊閉包
+       */
+      new webpack.optimize.ModuleConcatenationPlugin(),
     ],
     resolve: {
       extensions: ['.js', '.jsx'],
