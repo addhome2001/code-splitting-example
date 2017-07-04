@@ -11,8 +11,6 @@ const OfflinePlugin = require('offline-plugin');
 // analyzer tool
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const NODE_ENV = process.env.NODE_ENV || 'production';
-
 const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
@@ -52,8 +50,8 @@ module.exports = () =>
       // new BundleAnalyzerPlugin(),
 
       new webpack.NoEmitOnErrorsPlugin(),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: 'production',
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,

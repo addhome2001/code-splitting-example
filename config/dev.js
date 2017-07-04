@@ -5,7 +5,6 @@ const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = +process.env.PORT || 8000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
@@ -53,8 +52,8 @@ module.exports = () =>
        * 以方便除錯
        */
       new webpack.NamedModulesPlugin(),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: 'development',
       }),
     ],
     resolve: {
