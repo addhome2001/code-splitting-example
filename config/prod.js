@@ -98,18 +98,20 @@ module.exports = () =>
       // *** Manifest Section ***
       /**
        * inline your manifest.js with a script tag to save http request.
-       * 將產生的manifest.js寫進index.html，以節省請求
+       * 將產生的manifest.js提取出來，以節省請求
+       * 需透過htmlWebpackPlugin注入至index.html
        */
       new InlineManifestWebpackPlugin(),
 
       /**
-       * 替換掉InlineManifestWebpackPlugin預設產生Manifest的插件(原本只適用於webpack1)
+       * 產生manifest.json的映射檔
+       * 內容為chunk模塊id與檔案名稱的對照
        */
       new ChunkManifestPlugin(),
 
       /**
        * inject manifest.json into <head>
-       * 將產生的manifest.json寫進<head>，以節省請求
+       * 將產生的manifest.json inline至<head>內部，以節省請求
        */
       new InlineChunkManifestHtmlWebpackPlugin(),
 
