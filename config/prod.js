@@ -2,8 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ChunkManifestPlugin = require('chunk-manifest-webpack2-plugin');
-const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const InlineChunkManifestHtmlWebpackPlugin = require('inline-chunk-manifest-html-webpack-plugin');
+const InlineChunkWebpackPlugin = require('html-webpack-inline-chunk-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
@@ -101,7 +101,9 @@ module.exports = () =>
        * 將產生的manifest.js提取出來，以節省請求
        * 需透過htmlWebpackPlugin注入至index.html
        */
-      new InlineManifestWebpackPlugin(),
+      new InlineChunkWebpackPlugin({
+        inlineChunks: ['manifest'],
+      }),
 
       /**
        * 產生manifest.json的映射檔
