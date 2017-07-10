@@ -24,7 +24,6 @@ module.exports = () =>
       contentBase: distPath,
       historyApiFallback: true,
     },
-    devtool: 'eval-source-map',
     output: {
       path: distPath,
       publicPath: '/',
