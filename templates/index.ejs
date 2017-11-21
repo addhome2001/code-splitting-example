@@ -5,11 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <% if (!htmlWebpackPlugin.options.__DEV__) { %>
+        <!-- manifest section -->
+        <link rel="manifest" href="manifest.json">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="application-name" content="My App">
+        <meta name="apple-mobile-web-app-title" content="My App">
+        <meta name="theme-color" content="#1cc4a3">
+        <meta name="msapplication-navbutton-color" content="#1cc4a3">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="msapplication-starturl" content=".">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192x192.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/images/icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512x512.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="/images/icon-512x512.png">
+    <% } %>
 </head>
 <body>
-  <div id="container"></div>
-  <% if (!htmlWebpackPlugin.options.__DEV__) { %>
-      <iframe src="/appcache/manifest.html" style="display: none"></iframe>
-  <% } %>
+    <div id="container"></div>
+    <% if (!htmlWebpackPlugin.options.__DEV__) { %>
+        <iframe src="/appcache/manifest.html" style="display: none"></iframe>
+    <% } %>
+    <noscript>
+        <div class="no-script-msg">
+            You don't have javascript enabled.
+        </div>
+    </noscript>
 </body>
 </html>

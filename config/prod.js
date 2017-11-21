@@ -7,6 +7,7 @@ const InlineChunkWebpackPlugin = require('html-webpack-inline-chunk-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // analyzer tool
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -14,6 +15,7 @@ const OfflinePlugin = require('offline-plugin');
 const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
+const chunkManifestFilename = 'chunk-manifest';
 
 module.exports = () =>
   ({
@@ -109,13 +111,17 @@ module.exports = () =>
        * 產生manifest.json的映射檔
        * 內容為chunk模塊id與檔案名稱的對照
        */
-      new ChunkManifestPlugin(),
+      new ChunkManifestPlugin({
+        filename: `${chunkManifestFilename}.json`,
+      }),
 
       /**
        * inject manifest.json into <head>
        * 將產生的manifest.json inline至<head>內部，以節省請求
        */
-      new InlineChunkManifestHtmlWebpackPlugin(),
+      new InlineChunkManifestHtmlWebpackPlugin({
+        filename: `${chunkManifestFilename}.json`,
+      }),
 
       // *** Code-spliting Section ***
       /**
@@ -218,6 +224,20 @@ module.exports = () =>
        * 啟動webpack預設模塊閉包
        */
       new webpack.optimize.ModuleConcatenationPlugin(),
+
+      new CopyWebpackPlugin([
+        {
+          /**
+           * copy the manifest.json from src to dist directory
+           */
+          from: `${entryPath}/manifest.json`,
+          to: `${distPath}/manifest.json`,
+        },
+        {
+          from: `${entryPath}/assets/images`,
+          to: `${distPath}/images`,
+        },
+      ]),
     ],
     resolve: {
       extensions: ['.js', '.jsx'],
