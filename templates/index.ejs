@@ -7,9 +7,14 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
-  <div id="container"></div>
-  <% if (!htmlWebpackPlugin.options.__DEV__) { %>
-      <iframe src="/appcache/manifest.html" style="display: none"></iframe>
-  <% } %>
+    <div id="container"></div>
+    <% if (!htmlWebpackPlugin.options.__DEV__) { %>
+        <iframe src="/appcache/manifest.html" style="display: none"></iframe>
+    <% } %>
+    <noscript>
+        <div class="no-script-msg">
+            You don't have javascript enabled.
+        </div>
+    </noscript>
 </body>
 </html>
