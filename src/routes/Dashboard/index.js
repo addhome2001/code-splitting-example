@@ -1,16 +1,9 @@
-// export default {
-//   path: 'dashboard',
-//   getComponent(nextState, cb) {
-//     import(/* webpackChunkName: 'dashboard' */'./components/Dashboard').then(page =>
-//       cb(null, page.default),
-//     );
-//   },
-// };
-
 // components
-import Dashboard from './components/Dashboard';
+import Loadable from '../../components/Loadable';
 
 export default {
   path: '/dashboard',
-  component: Dashboard,
+  component: Loadable(
+    () => import(/* webpackChunkName: 'dashboard' */'./components/Dashboard'),
+  ),
 };

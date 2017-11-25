@@ -1,16 +1,9 @@
-// export default {
-//   path: 'about',
-//   getComponent(nextState, cb) {
-//     import(/* webpackChunkName: 'about' */'./components/About').then(about =>
-//       cb(null, about.default),
-//     );
-//   },
-// };
-
 // components
-import About from './components/About';
+import Loadable from '../../../../components/Loadable';
 
 export default {
   path: '/page/about',
-  component: About,
+  component: Loadable(
+    () => import(/* webpackChunkName: 'about' */'./components/About'),
+  ),
 };

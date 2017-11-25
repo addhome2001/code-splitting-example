@@ -13,7 +13,7 @@ export default RouteComponent =>
 
     render() {
       return (
-        <RouteComponent>
+        <RouteComponent { ...this.props }>
           { renderRoutes(this.props.route.routes) }
         </RouteComponent>
       );
