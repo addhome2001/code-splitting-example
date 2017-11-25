@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, browserHistory } from 'react-router';
+import BrowserRouter from 'react-router-dom/BrowserRouter';
+import { renderRoutes } from 'react-router-config';
 
 // routes object
 import routes from './main';
@@ -11,7 +12,13 @@ import './config';
 // css
 import './assets/css/app.css';
 
+const AppRouter = () => (
+  <BrowserRouter>
+    { renderRoutes(routes) }
+  </BrowserRouter>
+);
+
 render(
-  <Router history={ browserHistory } routes={ routes } />,
+  <AppRouter />,
   document.getElementById('container'),
 );

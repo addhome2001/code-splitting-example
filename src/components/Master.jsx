@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, IndexLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
 
-const Master = ({ children }) =>
+const Master = ({ route }) => (
   <div className="links">
-    <IndexLink activeClassName="actived" to="/">Home</IndexLink>
-    <Link activeClassName="actived" to="/dashboard">Dashboard</Link>
-    <Link activeClassName="actived" to="/page/profile">Profile</Link>
-    <Link activeClassName="actived" to="/page/about">About</Link>
-    { children }
-  </div>;
+    <NavLink exact activeClassName="actived" to="/">Home</NavLink>
+    <NavLink activeClassName="actived" to="/dashboard">Dashboard</NavLink>
+    <NavLink activeClassName="actived" to="/page/profile">Profile</NavLink>
+    <NavLink activeClassName="actived" to="/page/about">About</NavLink>
+    { renderRoutes(route.routes) }
+  </div>
+);
 
 Master.propTypes = {
-  children: PropTypes.element.isRequired,
+  route: PropTypes.shape({
+    routes: PropTypes.array,
+    component: PropTypes.func,
+  }).isRequired,
 };
 
 export default Master;
