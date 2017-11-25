@@ -19,6 +19,7 @@ const chunkManifestFilename = 'chunk-manifest';
 
 module.exports = () =>
   ({
+    target: 'web',
     entry: {
       bundle: entryPath,
     },
