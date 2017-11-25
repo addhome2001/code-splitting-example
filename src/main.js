@@ -1,14 +1,15 @@
 // routes
-import Master from './components/Master';
-import Home from './components/Home';
-
-// components
 import Page from './routes/Page';
 import Dashboard from './routes/Dashboard';
 
+// components
+import Master from './components/Master';
+import Home from './components/Home';
+import RouteRender from './components/RouteRender';
+
 const routes = [
   {
-    component: Master,
+    component: RouteRender(Master),
     routes: [
       {
         path: '/',

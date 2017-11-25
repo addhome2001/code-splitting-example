@@ -1,19 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { renderRoutes } from 'react-router-config';
 
-const Page = ({ route }) => (
+const Page = ({ children }) => (
   <div>
     <h1>Page Type:</h1>
-    { renderRoutes(route.routes) }
+    { children }
   </div>
 );
 
 Page.propTypes = {
-  route: PropTypes.shape({
-    routes: PropTypes.array,
-    component: PropTypes.func,
-  }).isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 export default Page;

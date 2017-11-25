@@ -21,10 +21,11 @@ import About from './routes/About';
 
 // components
 import Page from './components/Page';
+import RouteRender from '../../components/RouteRender';
 
 export default {
   path: '/page',
-  component: Page,
+  component: RouteRender(Page),
   routes: [
     Profile,
     About,
