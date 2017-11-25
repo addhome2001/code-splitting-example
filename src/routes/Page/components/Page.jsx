@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Page = ({ children }) =>
+import RouteRender from '../../../components/RouteRender';
+
+export const Page = ({ children }) => (
   <div>
     <h1>Page Type:</h1>
     { children }
-  </div>;
+  </div>
+);
 
 Page.propTypes = {
   children: PropTypes.element.isRequired,
 };
 
-export default Page;
+export default RouteRender(Page);

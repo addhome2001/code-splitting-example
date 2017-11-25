@@ -1,16 +1,17 @@
+// routes
+import Profile from './routes/Profile';
+import About from './routes/About';
+
+// components
+import Loadable from '../../components/Loadable';
+
 export default {
-  path: 'page',
-  getComponent(nextState, cb) {
-    import(/* webpackChunkName: 'page' */'./components/Page').then(page =>
-      cb(null, page.default),
-    );
-  },
-  getChildRoutes(partialNextState, cb) {
-    Promise.all([
-      import(/* webpackChunkName: 'route-profile' */'./routes/Profile'),
-      import(/* webpackChunkName: 'route-about' */'./routes/About'),
-    ]).then(([Profile, About]) =>
-      cb(null, [Profile.default, About.default]),
-    );
-  },
+  path: '/page',
+  component: Loadable(
+    () => import(/* webpackChunkName: 'page' */'./components/Page'),
+  ),
+  routes: [
+    Profile,
+    About,
+  ],
 };

@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, IndexLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
-const Master = ({ children }) =>
+const Master = ({ children }) => (
   <div className="links">
-    <IndexLink activeClassName="actived" to="/">Home</IndexLink>
-    <Link activeClassName="actived" to="/dashboard">Dashboard</Link>
-    <Link activeClassName="actived" to="/page/profile">Profile</Link>
-    <Link activeClassName="actived" to="/page/about">About</Link>
+    <NavLink exact activeClassName="actived" to="/">Home</NavLink>
+    <NavLink activeClassName="actived" to="/dashboard">Dashboard</NavLink>
+    <NavLink activeClassName="actived" to="/page/profile">Profile</NavLink>
+    <NavLink activeClassName="actived" to="/page/about">About</NavLink>
     { children }
-  </div>;
+  </div>
+);
 
 Master.propTypes = {
   children: PropTypes.element.isRequired,

@@ -4,10 +4,11 @@ import capitalize from 'capitalize';
 
 const locate = capitalize('profile');
 
-const Profile = () =>
+const Profile = () => (
   <div>
-    <p>{ locate }</p>
+    <p>{ locate } now.</p>
     <Avatar round name="addhome" src="https://avatars0.githubusercontent.com/u/8936648?v=3" />
-  </div>;
+  </div>
+);
 
 export default Profile;

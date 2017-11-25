@@ -3,10 +3,11 @@ import capitalize from 'capitalize';
 
 const locate = capitalize('home');
 
-const Home = () =>
+const Home = () => (
   <div>
     <h1>{ locate }</h1>
     <p>{ locate } now.</p>
-  </div>;
+  </div>
+);
 
 export default Home;

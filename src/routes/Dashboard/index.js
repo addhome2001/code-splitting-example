@@ -1,8 +1,9 @@
+// components
+import Loadable from '../../components/Loadable';
+
 export default {
-  path: 'dashboard',
-  getComponent(nextState, cb) {
-    import(/* webpackChunkName: 'dashboard' */'./components/Dashboard').then(page =>
-      cb(null, page.default),
-    );
-  },
+  path: '/dashboard',
+  component: Loadable(
+    () => import(/* webpackChunkName: 'dashboard' */'./components/Dashboard'),
+  ),
 };
