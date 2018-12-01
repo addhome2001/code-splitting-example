@@ -10,71 +10,70 @@ const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
 
-module.exports = () =>
-  ({
-    entry: {
-      bundle: [
-        'webpack/hot/dev-server',
-        entryPath,
-      ],
-    },
-    devServer: {
-      host: HOST,
-      port: PORT,
-      contentBase: distPath,
-      historyApiFallback: true,
-    },
-    mode: 'development',
-    output: {
-      path: distPath,
-      publicPath: '/',
-      filename: '[name].js',
-      chunkFilename: '[name].js',
-    },
-    plugins: [
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.LoaderOptionsPlugin({
-        minimize: false,
-        debug: true,
-      }),
-      new HtmlWebpackPlugin({
-        title: 'Example',
-        filename: 'index.html',
-        template,
-        __DEV__: true,
-      }),
-      new PreloadWebpackPlugin({
-        rel: 'prefetch',
-      }),
-      new webpack.EnvironmentPlugin({
-        NODE_ENV: 'development',
-      }),
+module.exports = () => ({
+  entry: {
+    bundle: [
+      'webpack/hot/dev-server',
+      entryPath,
     ],
-    resolve: {
-      extensions: ['.js', '.jsx'],
-      modules: ['node_modules'],
-    },
-    module: {
-      rules: [
-        {
-          test: /\.js[x]?$/,
-          exclude: /(node_modules)/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                cacheDirectory: true,
-              },
+  },
+  devServer: {
+    host: HOST,
+    port: PORT,
+    contentBase: distPath,
+    historyApiFallback: true,
+  },
+  mode: 'development',
+  output: {
+    path: distPath,
+    publicPath: '/',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: false,
+      debug: true,
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Example',
+      filename: 'index.html',
+      template,
+      __DEV__: true,
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'prefetch',
+    }),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development',
+    }),
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js[x]?$/,
+        exclude: /(node_modules)/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
             },
-          ],
-        },
-        {
-          test: /\.css$/,
-          use: [
-            'style-loader',
-            'css-loader',
-          ],
-        },
-      ],
-    },
-  });
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
+    ],
+  },
+});
