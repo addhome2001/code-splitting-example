@@ -133,14 +133,6 @@ module.exports = () => ({
     new InlineManifestWebpackPlugin('runtime'),
 
     /**
-     * 產生manifest的映射檔
-     * 內容為chunk模塊id與檔案名稱的對照
-     */
-    // new ChunkManifestPlugin({
-    //   filename: `${chunkManifestFilename}.json`,
-    // }),
-
-    /**
      * extract css file
      * 由於css是由進入點js引入的，所以chunkhash會相同
      * 這導致只要進入點js修改後，也會改變css的chunkhash
