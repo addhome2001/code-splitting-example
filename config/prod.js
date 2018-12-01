@@ -1,10 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ChunkManifestPlugin = require('chunk-manifest-webpack2-plugin');
-const InlineChunkManifestHtmlWebpackPlugin = require('inline-chunk-manifest-html-webpack-plugin');
-const InlineChunkWebpackPlugin = require('html-webpack-inline-chunk-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -15,7 +13,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const entryPath = path.resolve(__dirname, '../src');
 const distPath = path.resolve(__dirname, '../dist');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
-const chunkManifestFilename = 'chunk-manifest';
 
 module.exports = () =>
   ({
@@ -30,6 +27,48 @@ module.exports = () =>
       chunkFilename: '[name].[chunkhash:8].chunk.js',
     },
     devtool: 'cheap-source-map',
+    mode: 'production',
+
+    // *** Code-spliting Section ***
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          /**
+           * extract vendor
+           * 將路徑有node_modules的模組分開打包
+           * 並命名為vendor
+           */
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+          },
+
+          /**
+           * extracting react-avatar from vendor
+           * 將react-avatar從vendor分離出來
+           * 並且設定為async，該模塊將會懶加載
+           */
+          'react-avatar': {
+            chunks: 'async',
+            name: 'react-avatar',
+            test: /[\\/]node_modules[\\/](react-avatar)[\\/]/,
+          },
+        },
+      },
+
+      /**
+      * after extracted manifest.js from vendor
+      * vendor asset hash won't change except modified vendor.
+      * 由於CommonsChunkPlugin是要從主模塊分離出chunk
+      * 在vendor被分離出來後（上面），只剩下runtime code的部分
+      * 而runtime code包含了每個模塊的id和hash
+      * 如不把runtime分開，會導致vendor的hash和模塊的變化會連動
+      * 所以將runtime code單獨打包並命名為manifest（任何命名都可）
+      */
+      runtimeChunk: {
+        name: 'runtime',
+      },
+    },
     plugins: [
       /**
        * 由於chunk異步加載會使用到promise
@@ -52,24 +91,12 @@ module.exports = () =>
        */
       // new BundleAnalyzerPlugin(),
 
-      new webpack.NoEmitOnErrorsPlugin(),
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'production',
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false,
-      }),
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true,
-        compress: {
-          warnings: false,
-          unused: true,
-          dead_code: true,
-        },
-        output: {
-          comments: false,
-        },
       }),
 
       /**
@@ -104,68 +131,15 @@ module.exports = () =>
        * 將產生的manifest.js提取出來，以節省請求
        * 需透過htmlWebpackPlugin注入至index.html
        */
-      new InlineChunkWebpackPlugin({
-        inlineChunks: ['manifest'],
-      }),
+      new InlineManifestWebpackPlugin('runtime'),
 
       /**
-       * 產生manifest.json的映射檔
+       * 產生manifest的映射檔
        * 內容為chunk模塊id與檔案名稱的對照
        */
-      new ChunkManifestPlugin({
-        filename: `${chunkManifestFilename}.json`,
-      }),
-
-      /**
-       * inject manifest.json into <head>
-       * 將產生的manifest.json inline至<head>內部，以節省請求
-       */
-      new InlineChunkManifestHtmlWebpackPlugin({
-        filename: `${chunkManifestFilename}.json`,
-      }),
-
-      // *** Code-spliting Section ***
-      /**
-       * extracting react-avatar from vendor
-       * 將react-avatar從vendor分離出來
-       * 並且設定為async，該模塊將會懶加載
-       */
-      new webpack.optimize.CommonsChunkPlugin({
-        async: 'react-avatar',
-        minChunks(module) {
-          const context = module.context;
-          const target = ['react-avatar'];
-          return context && context.indexOf('node_modules') >= 0 && target.find(t => new RegExp(t, 'gi').test(context));
-        },
-      }),
-
-      /**
-       * extract vendor
-       * 將路徑有node_modules的模組分開打包
-       * 並命名為vendor
-       */
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks(module) {
-          const context = module.context;
-          return context && context.indexOf('node_modules') >= 0;
-        },
-      }),
-
-      /**
-       * after extracted manifest.js from vendor
-       * vendor asset hash won't change except modified vendor.
-       * 由於CommonsChunkPlugin是要從主模塊分離出chunk
-       * 在vendor被分離出來後（上面），只剩下runtime code的部分
-       * 而runtime code包含了每個模塊的id和hash
-       * 如不把runtime分開，會導致vendor的hash和模塊的變化會連動
-       * 所以將runtime code單獨打包並命名為manifest（任何命名都可）
-       */
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'manifest',
-        // 除了runtime code之外，不加入其他模塊
-        minChunks: Infinity,
-      }),
+      // new ChunkManifestPlugin({
+      //   filename: `${chunkManifestFilename}.json`,
+      // }),
 
       /**
        * extract css file
@@ -173,7 +147,7 @@ module.exports = () =>
        * 這導致只要進入點js修改後，也會改變css的chunkhash
        * 而contenthash則是以內容產生hash
        */
-      new ExtractTextPlugin({
+      new MiniCssExtractPlugin({
         filename: '[name].[contenthash:8].css',
       }),
 
@@ -221,11 +195,6 @@ module.exports = () =>
         },
         // externals: [],
       }),
-      /**
-       * 啟動webpack預設模塊閉包
-       */
-      new webpack.optimize.ModuleConcatenationPlugin(),
-
       new CopyWebpackPlugin([
         {
           /**
@@ -257,10 +226,10 @@ module.exports = () =>
         },
         {
           test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: 'css-loader',
-          }),
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+          ],
         },
       ],
     },

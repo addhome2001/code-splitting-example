@@ -24,6 +24,7 @@ module.exports = () =>
       contentBase: distPath,
       historyApiFallback: true,
     },
+    mode: 'development',
     output: {
       path: distPath,
       publicPath: '/',
@@ -45,12 +46,6 @@ module.exports = () =>
       new PreloadWebpackPlugin({
         rel: 'prefetch',
       }),
-      /**
-       * 預設webpack的模塊id是數字
-       * NamedModulesPlugin將數字替換成模塊路徑
-       * 以方便除錯
-       */
-      new webpack.NamedModulesPlugin(),
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'development',
       }),
