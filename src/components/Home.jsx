@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import capitalize from 'capitalize';
 
 const locate = capitalize('home');
 
 const Home = () => (
-  <div>
+  <Fragment>
     <h1>{ locate }</h1>
     <p>{ locate } now.</p>
-  </div>
+  </Fragment>
 );
 
 export default Home;

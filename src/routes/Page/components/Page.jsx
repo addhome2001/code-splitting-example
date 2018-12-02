@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import RouteRender from '../../../components/RouteRender';
 
 export const Page = ({ children }) => (
-  <div>
+  <Fragment>
     <h1>Page Type:</h1>
     { children }
-  </div>
+  </Fragment>
 );
 
 Page.propTypes = {
