@@ -6,6 +6,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // analyzer tool
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -28,8 +30,16 @@ module.exports = () => ({
   devtool: 'cheap-source-map',
   mode: 'production',
 
-  // *** Code-spliting Section ***
   optimization: {
+    minimizer: [
+      new TerserPlugin({
+        sourceMap: true,
+        cache: true,
+      }),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
+
+    // *** Code-spliting Section ***
     splitChunks: {
       cacheGroups: {
         /**
@@ -58,7 +68,6 @@ module.exports = () => ({
     /**
     * after extracted manifest.js from vendor
     * vendor asset hash won't change except modified vendor.
-    * 由於CommonsChunkPlugin是要從主模塊分離出chunk
     * 在vendor被分離出來後（上面），只剩下runtime code的部分
     * 而runtime code包含了每個模塊的id和hash
     * 如不把runtime分開，會導致vendor的hash和模塊的變化會連動
@@ -126,8 +135,8 @@ module.exports = () => ({
 
     // *** Manifest Section ***
     /**
-     * inline your manifest.js with a script tag to save http request.
-     * 將產生的manifest.js提取出來，以節省請求
+     * inline your runtime.js with a script tag to save http request.
+     * 將產生的runtime.js提取出來，以節省請求
      * 需透過htmlWebpackPlugin注入至index.html
      */
     new InlineManifestWebpackPlugin('runtime'),
