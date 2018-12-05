@@ -7,7 +7,7 @@ const HOST = process.env.HOST || 'localhost';
 const PORT = +process.env.PORT || 8000;
 
 const entryPath = path.resolve(__dirname, '../src');
-const distPath = path.resolve(__dirname, '../dist');
+const destPath = path.resolve(__dirname, '../build');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
 
 module.exports = () => ({
@@ -20,12 +20,12 @@ module.exports = () => ({
   devServer: {
     host: HOST,
     port: PORT,
-    contentBase: distPath,
+    contentBase: destPath,
     historyApiFallback: true,
   },
   mode: 'development',
   output: {
-    path: distPath,
+    path: destPath,
     publicPath: '/',
     filename: '[name].js',
     chunkFilename: '[name].js',

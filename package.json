@@ -6,7 +6,7 @@
   "author": "addhome2001",
   "scripts": {
     "start": "better-npm-run start",
-    "clear": "rimraf dist",
+    "clear": "rimraf ./build",
     "lint": "./node_modules/.bin/eslint . --ignore-path .gitignore",
     "debug": "better-npm-run debug",
     "build": "better-npm-run build"

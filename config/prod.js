@@ -13,7 +13,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const entryPath = path.resolve(__dirname, '../src');
-const distPath = path.resolve(__dirname, '../dist');
+const destPath = path.resolve(__dirname, '../build');
 const template = path.resolve(__dirname, '../templates', 'index.ejs');
 
 module.exports = () => ({
@@ -22,7 +22,7 @@ module.exports = () => ({
     bundle: entryPath,
   },
   output: {
-    path: distPath,
+    path: destPath,
     publicPath: '/',
     filename: '[name].[chunkhash:8].js',
     chunkFilename: '[name].[chunkhash:8].chunk.js',
@@ -198,14 +198,14 @@ module.exports = () => ({
     new CopyWebpackPlugin([
       {
         /**
-         * copy the manifest.json from src to dist directory
+         * copy the manifest.json from src to build directory
          */
         from: `${entryPath}/manifest.json`,
-        to: `${distPath}/manifest.json`,
+        to: `${destPath}/manifest.json`,
       },
       {
         from: `${entryPath}/assets/images`,
-        to: `${distPath}/images`,
+        to: `${destPath}/images`,
       },
     ]),
   ],

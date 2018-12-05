@@ -55,5 +55,5 @@ build/
 .idea/
 .git/
 .DS_Store
-dist/bundle.js
-/dist
+build/bundle.js
+/build
